@@ -8,7 +8,7 @@ En este curso aprenderás a utilizar las herramientas de vibe coding para aprove
 
 ---
 
-## 🧠 Los Cuatro Pilares del Pensamiento
+## Los Cuatro Pilares del Pensamiento
 
 ### 1. **Logical Thinking** → ¿Cuál es el juego?
 Comprender la naturaleza fundamental del problema o proyecto que queremos resolver.
@@ -24,7 +24,7 @@ Desarrollar estrategias efectivas para ejecutar y optimizar la solución.
 
 ---
 
-## 📋 Niveles de Documentación para Vibe Coding
+##  Niveles de Documentación para Vibe Coding
 
 ### **PRD (Product Requirements Document)**
 
@@ -52,7 +52,7 @@ Desarrollar estrategias efectivas para ejecutar y optimizar la solución.
 
 ---
 
-## 🎯 Los 5 Fundamentos del Vibe Coding
+##  Los 5 Fundamentos del Vibe Coding
 
 ### 1. **Thinking**
 Desarrollar un pensamiento estructurado antes de codificar.
@@ -71,7 +71,7 @@ Proporcionar contexto rico y relevante a las herramientas de IA.
 
 ---
 
-## 🛠️ Framework Selection
+##  Framework Selection
 
 Siempre busca recomendaciones dentro del ecosistema tecnológico que conoces, considerando:
 - Lo que estás intentando construir
@@ -81,7 +81,7 @@ Siempre busca recomendaciones dentro del ecosistema tecnológico que conoces, co
 
 ---
 
-## ✅ Checkpoints & Version Control
+##  Checkpoints & Version Control
 
 **Uso de GitHub** para:
 - Mantener versiones del proyecto
@@ -96,7 +96,7 @@ Siempre busca recomendaciones dentro del ecosistema tecnológico que conoces, co
 
 ---
 
-## 🐛 Debugging Sistemático
+##  Debugging Sistemático
 
 ### Proceso en 3 pasos:
 
@@ -111,7 +111,7 @@ Siempre busca recomendaciones dentro del ecosistema tecnológico que conoces, co
 
 ---
 
-## 🔍 Context is King
+## Context is King
 
 > **Mayor ventana de contexto = Mejores resultados**
 
@@ -124,7 +124,7 @@ Siempre busca recomendaciones dentro del ecosistema tecnológico que conoces, co
 
 ---
 
-## 🚀 Workflow Completo: De la Idea al Código
+## Workflow Completo: De la Idea al Código
 
 ### Paso 1: Thinking
 ```
@@ -162,7 +162,7 @@ Implementar version control desde el inicio
 
 ---
 
-## 💡 Tips Profesionales
+##  Tips Profesionales
 
 ### 1. **Start Small and Work Your Way Up**
 - Comienza con un MVP mínimo
@@ -201,7 +201,7 @@ Crea archivos de reglas para las herramientas de IA:
 
 ---
 
-## 📚 Resumen de Conceptos Clave
+## Resumen de Conceptos Clave
 
 | Concepto | Descripción | Impacto |
 |----------|-------------|---------|
@@ -213,7 +213,7 @@ Crea archivos de reglas para las herramientas de IA:
 
 ---
 
-## 🎓 Conclusión
+## Conclusión
 
 El vibe coding no se trata solo de usar herramientas de IA, sino de desarrollar un enfoque metodológico que combine pensamiento estructurado, buenas prácticas de desarrollo y aprovechamiento inteligente de la tecnología disponible.
 
