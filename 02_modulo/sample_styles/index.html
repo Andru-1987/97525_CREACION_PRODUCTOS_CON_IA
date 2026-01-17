@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva Espacios - Material Design 3</title>
+    
+    <!-- Fuentes de Google Material -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    
+    <!-- CSS Material Design 3 -->
+    <link rel="stylesheet" href="reservas.css">
+    
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- App Bar Material -->
+    <header class="app-bar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">
+                <span class="material-symbols-outlined">apartment</span>
+                ReservaEspacios
+            </a>
+            
+            <nav class="nav-menu">
+                <div class="nav-tabs">
+                    <a href="#" class="nav-tab active">
+                        <span class="material-symbols-outlined">meeting_room</span>
+                        Espacios
+                    </a>
+                    <a href="#" class="nav-tab">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                        Mis Reservas
+                    </a>
+                    <a href="#" class="nav-tab">
+                        <span class="material-symbols-outlined">description</span>
+                        Reglas
+                    </a>
+                    <a href="#" class="nav-tab">
+                        <span class="material-symbols-outlined">person</span>
+                        Perfil
+                    </a>
+                </div>
+                
+                <button class="md-button md-button-text" id="themeToggle">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="p-4">
+        <h1 class="headline-large mb-4">Reserva de Espacios Comunes</h1>
+        <p class="body-large mb-6">Gestiona fácilmente la reserva de los espacios compartidos de tu edificio</p>
+        
+        <!-- Chips de filtro -->
+        <div class="flex gap-2 mb-6">
+            <button class="md-chip md-chip-selected">
+                <span class="material-symbols-outlined">all_inclusive</span>
+                Todos
+            </button>
+            <button class="md-chip">
+                <span class="material-symbols-outlined">theaters</span>
+                SUM
+            </button>
+            <button class="md-chip">
+                <span class="material-symbols-outlined">outdoor_grill</span>
+                Parrilla
+            </button>
+            <button class="md-chip">
+                <span class="material-symbols-outlined">fitness_center</span>
+                Gimnasio
+            </button>
+        </div>
+        
+        <!-- Grid de espacios -->
+        <div class="spaces-grid gap-4">
+            <!-- Tarjeta SUM -->
+            <div class="space-card" style="--space-color: var(--md-space-sum)">
+                <div class="space-header">
+                    <div class="space-icon">
+                        <span class="material-symbols-outlined">theaters</span>
+                    </div>
+                    <div>
+                        <h3 class="space-title">SUM</h3>
+                        <span class="badge-status status-confirmed">
+                            <span class="material-symbols-outlined" style="font-size: 14px">check_circle</span>
+                            Disponible
+                        </span>
+                    </div>
+                </div>
+                <p class="body-medium">Salón de Usos Múltiples para eventos y reuniones</p>
+                <div class="flex items-center justify-between mt-4">
+                    <div class="flex items-center gap-2">
+                        <span class="space-capacity">
+                            <span class="material-symbols-outlined" style="font-size: 16px">group</span>
+                            0/50
+                        </span>
+                        <span class="md-badge">Gratis</span>
+                    </div>
+                    <button class="md-button md-button-filled md-button-small">
+                        <span class="material-symbols-outlined">book_online</span>
+                        Reservar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tarjeta Parrilla -->
+            <div class="space-card" style="--space-color: var(--md-space-parrilla)">
+                <div class="space-header">
+                    <div class="space-icon">
+                        <span class="material-symbols-outlined">outdoor_grill</span>
+                    </div>
+                    <div>
+                        <h3 class="space-title">Parrilla</h3>
+                        <span class="badge-status status-pending">
+                            <span class="material-symbols-outlined" style="font-size: 14px">schedule</span>
+                            Parcialmente ocupado
+                        </span>
+                    </div>
+                </div>
+                <p class="body-medium">Área de parrilla con mesas y asientos</p>
+                <div class="flex items-center justify-between mt-4">
+                    <div class="flex items-center gap-2">
+                        <span class="space-capacity">
+                            <span class="material-symbols-outlined" style="font-size: 16px">group</span>
+                            3/20
+                        </span>
+                        <span class="md-badge">Depósito $100</span>
+                    </div>
+                    <button class="md-button md-button-filled md-button-small">
+                        <span class="material-symbols-outlined">book_online</span>
+                        Reservar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Más espacios... -->
+        </div>
+    </main>
+
+    <!-- Script para toggle de tema -->
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const themeIcon = themeToggle.querySelector('.material-symbols-outlined');
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            themeIcon.textContent = newTheme === 'light' ? 'dark_mode' : 'light_mode';
+            
+            // Guardar preferencia
+            localStorage.setItem('theme', newTheme);
+        });
+        
+        // Cargar tema guardado
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', savedTheme);
+        themeIcon.textContent = savedTheme === 'light' ? 'dark_mode' : 'light_mode';
+    </script>
+</body>
+</html>
