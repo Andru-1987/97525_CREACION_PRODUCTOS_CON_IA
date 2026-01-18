@@ -1,5 +1,6 @@
-
 # De la Idea al MVP con IA
+
+_Resumen del material on demand(contenido de la plataforma)_
 
 ## **Idea Central**
 No empieces con la solución, empieza con el problema. La meta no es "tener una app", sino validar que estás resolviendo un **dolor real** para **personas reales**. La IA puede acelerar todo este proceso, pero nunca reemplazar la validación con usuarios.
