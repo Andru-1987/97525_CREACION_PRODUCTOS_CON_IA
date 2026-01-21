@@ -1,87 +1,120 @@
 
 
-# PROMPT PARA DESARROLLO DE APP DE RESERVAS COMUNES
+# PROMPT DEFINITIVO: APP DE GESTIÓN DE EDIFICIOS (CRUD + PWA + SUPABASE)
 
-Actúa como un Desarrollador Fullstack Senior experto en React, Supabase y UX. Genera la siguiente aplicación de gestión de edificios.
+Actúa como un Desarrollador Fullstack Senior. Crea una aplicación profesional para la gestión de reservas en edificios.
 
-## 1. ESQUEMA DE BASE DE DATOS (SUPABASE / POSTGRES)
-Ejecuta este SQL en el editor de Supabase:
+## 1. BACKEND: ESQUEMA DE DATOS (SUPABASE)
 
 ```sql
--- Habilitar extensiones
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- 1. CREACIÓN DE TABLAS
 
--- 1. Tabla de Perfiles (Extensión de Auth.users)
+-- Tabla de Perfiles (Extensión de Auth.Users)
 CREATE TABLE profiles (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  full_name TEXT NOT NULL,
-  unit_number TEXT NOT NULL,
+  id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
   email TEXT UNIQUE NOT NULL,
-  role TEXT DEFAULT 'RESIDENT' CHECK (role IN ('ADMIN', 'RESIDENT')),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
--- 2. Tabla de Espacios Comunes (Amenities)
-CREATE TABLE amenities (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
-  description TEXT,
+  unit TEXT NOT NULL,
+  role TEXT NOT NULL CHECK (role IN ('ADMIN', 'RESIDENT')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Tabla de Amenities
+CREATE TABLE amenities (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  icon TEXT DEFAULT '🏢',
   capacity INTEGER DEFAULT 10,
-  available_hours TEXT[] DEFAULT ARRAY['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'],
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 3. Tabla de Reservas
-CREATE TABLE reservations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  amenity_id UUID REFERENCES amenities(id) ON DELETE CASCADE,
-  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  date DATE NOT NULL,
-  start_time TIME NOT NULL,
-  end_time TIME NOT NULL,
-  status TEXT DEFAULT 'CONFIRMED' CHECK (status IN ('PENDING', 'CONFIRMED', 'CANCELLED')),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+-- Tabla de Reservas
+CREATE TABLE bookings (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  amenity_id UUID REFERENCES amenities(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
+  booking_date DATE NOT NULL,
+  time_slot TEXT NOT NULL,
+  status TEXT DEFAULT 'confirmed' CHECK (status IN ('confirmed', 'cancelled')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 4. Eventos e Inhabilitaciones
-CREATE TABLE community_events (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+-- Tabla de Anuncios
+CREATE TABLE announcements (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
-  description TEXT,
-  event_date DATE NOT NULL,
-  is_blocking BOOLEAN DEFAULT false,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+  content TEXT NOT NULL,
+  author_id UUID REFERENCES profiles(id),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- Tabla de Configuración Global
+CREATE TABLE app_settings (
+  id INTEGER PRIMARY KEY DEFAULT 1,
+  booking_lead_time_days INTEGER DEFAULT 1,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  CONSTRAINT one_row CHECK (id = 1)
+);
+
+-- 2. SEGURIDAD (Row Level Security - RLS)
+
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE amenities ENABLE ROW LEVEL SECURITY;
+ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE announcements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE app_settings ENABLE ROW LEVEL SECURITY;
+
+-- Políticas para Profiles
+CREATE POLICY "Public profiles are viewable by everyone" ON profiles FOR SELECT USING (true);
+CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
+
+-- Políticas para Amenities
+CREATE POLICY "Amenities are viewable by everyone" ON amenities FOR SELECT USING (true);
+CREATE POLICY "Only admins can modify amenities" ON amenities FOR ALL USING (
+  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'ADMIN')
+);
+
+-- Políticas para Bookings
+CREATE POLICY "Users can view own bookings" ON bookings FOR SELECT USING (auth.uid() = user_id OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'ADMIN'));
+CREATE POLICY "Users can create own bookings" ON bookings FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can cancel own bookings" ON bookings FOR UPDATE USING (auth.uid() = user_id);
+
+-- 3. INSERCIÓN DE DATOS INICIALES
+INSERT INTO app_settings (id, booking_lead_time_days) VALUES (1, 1);
+INSERT INTO amenities (name, icon, capacity) VALUES 
+('Gimnasio', '🏋️', 10),
+('Piscina', '🏊', 20),
+('Salón Social', '🎉', 50),
+('Parrilla', '🍖', 8);
 ```
 
-## 2. REQUISITOS FUNCIONALES CLAVE
+## 2. REGLAS TÉCNICAS INVIOLABLES
+- **Imports:** Usar rutas relativas estándar (ej. `../types`, `./Header`). NO usar alias `@/`.
+- **Datos:** No usar `.json` externos. Usar `mockData.ts` para constantes tipadas.
+- **PWA:** Debe incluir un `manifest.json` y service worker básico para ser instalable.
+- **Notificaciones:** Implementar un sistema de "Toasts" reactivos para simular notificaciones push en tiempo real.
 
-### Panel Administrador:
-- **Gestión de Residentes:** 
-  - Listado de residentes.
-  - Botón "Importar CSV" para carga masiva.
-  - Input de texto para ingresar múltiples residentes separados por comas (formato: "Nombre, Unidad, Email").
-  - Al crear el residente, disparar el alta en Supabase Auth y Profiles.
-- **Calendario Maestro:**
-  - Vista diaria/semanal/mensual con todas las reservas activas.
-  - Filtro por espacio común.
-- **Eventos:** CRUD de eventos importantes que bloquean fechas.
 
-### Panel Residente:
-- **Calendario de Reservas:**
-  - Seleccionar Espacio (Parrilla, Piscina, SUM).
-  - Seleccionar Día.
-  - Ver slots horarios disponibles (excluyendo ya reservados y fechas bloqueadas por admin).
-- **Mis Reservas:** Listado de sus reservas futuras con opción a cancelar.
+## 3. FUNCIONALIDADES CLAVE
+- **Dashboard Admin:**
+  - **CRUD de Amenities:** Crear (nombre, icono, capacidad), editar y eliminar espacios.
+  - **Gestión de Residentes:** Carga masiva mediante CSV o lista pegada (Nombre, Unidad, Email).
+  - **Anuncios:** Enviar mensajes que aparecen como notificaciones a todos los residentes.
+  - **Reservas:**  Puede crear, actualizar, cancelar y borrar cualquier reserva hecha por los residentes. Podra ver todos las reservas hechas en un calendario con el estilo Google Calendar. 
 
-## 3. ESTILO Y UX
-- **Colores:** Paleta moderna Slate/Blue (Primarios en azul profesional, fondos en blanco/gris suave).
-- **Dark Mode:** Implementar soporte completo con Tailwind `dark:`.
-- **PWA:** Asegurar que el `manifest.json` y Service Worker estén configurados para "Instalar en pantalla de inicio".
-- **Realtime:** Usar `supabase.channel()` para que el administrador vea las nuevas reservas al instante sin refrescar.
+  - **Modificacion de tiempo de anticipacion de reserva de espacios:** Podra modificar el tiempo que los residente pueden reservar los espacios, siendo por defecto 1 dia, pero va a tener la opcion de hacerlo con opciones de n dias o n semanas o n meses.
+  
+  
+- **Dashboard Residente:**
+  - **Reservas:** Interfaz de calendario/slots filtrada por disponibilidad horaria, ademas de permitir seleccionar el dia mostrandolo en un calendario del estilo de Google Calendar, que por defecto deba estar seleccionado 1 dia antes, por que no spuede reservar un espacio en el mismo dia(esta regla puede ser modificada por el rol de administrador).
+  - **Mis Reservas:** Historial y cancelación.
+  - **Centro de Notificaciones:** Campanita con avisos del administrador.
 
-## 4. INSTRUCCIONES DE IMPLEMENTACIÓN
-- Utiliza **Lucide React** para iconos.
-- Utiliza **date-fns** para la lógica de fechas del calendario.
-- Utiliza **Recharts** si es necesario mostrar estadísticas de uso en el dashboard admin.
-- La navegación debe ser SPA (Single Page Application) fluida.
+## 4. UI/UX (Vibe Coding)
+- **Paleta:** Slate-900 para fondos oscuros, Primary-500 (#0ea5e9) para acciones principales.
+- **Interacción:** Animaciones con Framer Motion o Tailwind Animate. Toasts de éxito/error.
+- **Responsividad:** Mobile-first total. Navegación inferior en móviles, sidebar en desktop.
+
+## 5. ACCESO DEMO
+- Admin: admin@edificio.com / admin123
+- Residente: vecino@edificio.com / vecino123
