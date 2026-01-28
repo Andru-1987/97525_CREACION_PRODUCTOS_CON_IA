@@ -1,10 +1,13 @@
-
-
 # PROMPT DEFINITIVO: APP DE GESTIÓN DE EDIFICIOS (CRUD + PWA + SUPABASE)
 
 Actúa como un Desarrollador Fullstack Senior. Crea una aplicación profesional para la gestión de reservas en edificios.
 
 ## 1. BACKEND: ESQUEMA DE DATOS (SUPABASE)
+- Generar las tablas necesarias para el modelo de negocio
+- Ingestar algunos registros de prueba
+- Implementar RLS (Row Level Security) en Supabase.
+- Conexión a Supabase mediante **MCP**
+
 
 ```sql
 -- 1. CREACIÓN DE TABLAS
@@ -110,7 +113,8 @@ INSERT INTO amenities (name, icon, capacity) VALUES
   - **Mis Reservas:** Historial y cancelación.
   - **Centro de Notificaciones:** Campanita con avisos del administrador.
 
-## 4. UI/UX (Vibe Coding)
+## 4. UI/UX (Vibe)
+- **Estilo template** : Pagina de referencia:  https://www.squarespace.com/ 
 - **Paleta:** Slate-900 para fondos oscuros, Primary-500 (#0ea5e9) para acciones principales.
 - **Interacción:** Animaciones con Framer Motion o Tailwind Animate. Toasts de éxito/error.
 - **Responsividad:** Mobile-first total. Navegación inferior en móviles, sidebar en desktop.
