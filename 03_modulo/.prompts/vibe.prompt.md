@@ -17,7 +17,10 @@ Actualmente existe:
 * Un **frontend funcional** (React / PWA)
 * Interfaces de administrador y residente
 * Validaciones básicas del lado del cliente
-
+* Tener como referencia el proyecto de la unidad 2 (CRUD, PWA, Supabase, roles)
+* Tener como diseño template la siguiente página web: 
+  - https://www.squarespace.com/ 
+  
 Problema actual:
 
 * No existe backend real
